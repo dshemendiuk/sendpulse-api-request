@@ -171,7 +171,11 @@ function sendRequest(path, method, data, callback) {
     );
     req.write(JSON.stringify(data));
     req.on('error', function (error) {
-        var answer = returnError(error.code);
+        if (error.message !== undefined) {
+            var answer = returnError(error.message, error.errno);
+        } else {
+            var answer = returnError(error.code, error.errno);
+        }
         callback(answer);
     });
     req.end();
@@ -212,10 +216,13 @@ function getToken(callback) {
  *
  *  @return object
  */
-function returnError(message) {
+function returnError(message, code) {
     var data = {is_error: 1};
     if (message !== undefined && message.length) {
         data['message'] = message
+    }
+    if (code !== undefined && code) {
+        data['error_code'] = code;
     }
     return data;
 }
