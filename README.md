@@ -1,7 +1,6 @@
 # SendPulse API Request
-A simple SendPulse API client library for Node.js
+A simple [SendPulse API](https://sendpulse.com/api) client wrapper for Node.js.
 
-API Documentation [https://sendpulse.com/api](https://sendpulse.com/api)
 
 ### Install
 
@@ -10,20 +9,38 @@ npm install sendpulse-api-request
 ```
 
 ### Usage
+This module helps you with authorization and you just perform requests to native SendPulse API methods endpoints with specific parameters. 
 
 ```javascript
 const sendpulse = require("sendpulse-api-request");
-/*
- * https://login.sendpulse.com/settings/#api
- */
-const API_USER_ID = "USER_ID";
-const API_SECRET = "USER_SECRET";
 const TOKEN_STORAGE = "/tmp/";
 
-sendpulse.init(API_USER_ID, API_SECRET, TOKEN_STORAGE, function() {
-    sendpulse.sendRequest("/whatsapp/account", "GET", {}, function(data) {
-        console.log(data)
-    });
+/*
+ * Initialization with SendPulse credentials https://login.sendpulse.com/settings/#api
+ */
+sendpulse.init("USER_ID", "USER_SECRET", TOKEN_STORAGE, function() {console.log});
+
+/*
+ * Get a list of WhatsApp chats (https://sendpulse.com/integrations/api/chatbot/whatsapp#/chats/get_chats)
+ */
+sendpulse.sendRequest("/whatsapp/chats", "GET", {"bot_id": "XXXXXXXXXXXX"}, function(data) {
+    console.log(JSON.stringify(data))
+});
+
+/*
+ * Send a WhatsApp message to a phone number (https://sendpulse.com/integrations/api/chatbot/whatsapp#/contacts/post_contacts_sendByPhone)
+ */
+sendpulse.sendRequest("/whatsapp/contacts/sendByPhone", "POST", {
+    "bot_id": "XXXXXXXXXXXX",
+    "phone": "1XXXXXXXXXX",
+    "message": {
+        "type": "text",
+        "text": {
+            "body": "sample text"
+        }
+    }
+}, function(data) {
+    console.log(data)
 });
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "sendpulse-api-request",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple SendPulse API client library for Node.js",
   "main": "index.js",
   "scripts": {
